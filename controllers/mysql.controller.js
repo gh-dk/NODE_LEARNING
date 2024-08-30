@@ -15,7 +15,7 @@ const getAUsersById = async (connection, id) => {
       "SELECT * from employee where id='" + id + "'"
     );
     console.log("All users:", results);
-    return results
+    return results;
   } catch (error) {
     console.error("Error fetching users:", error);
   }
@@ -32,33 +32,42 @@ const deleteUsersById = async (connection, id) => {
   }
 };
 
-const insertIntoUser = async (connection, id, name, email, age) => {
+const insertIntoUser = async (
+  connection,
+  id,
+  name,
+  email,
+  age,
+  profilepicture
+) => {
   try {
-    const query = `INSERT INTO employee (id, name, email, age) VALUES (?, ?, ?, ?)`;
-    const [results, fields] = await connection.query(
-      query,
-      [id, name, email, age],
-      function (error, results, fields) {
-        if (error) throw error;
-        console.log("User inserted: ", results);
-      }
-    );
-    console.log("All users:", results);
+    const query = `INSERT INTO employee (id, name, email, age, profilepicture) VALUES (?, ?, ?, ?, ?)`;
+    const [results] = await connection.query(query, [
+      id,
+      name,
+      email,
+      age,
+      profilepicture,
+    ]);
+    console.log("User inserted: ", results);
+    return results;
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error("Error inserting user:", error);
+    throw error;
   }
 };
 
-const updateUser = async (connection, id, name, email, age) => {
-  const query = `UPDATE employee SET name = ?, email = ?, age = ? WHERE id = ?`;
+const updateUser = async (connection, id, name, email, age, profilepicture) => {
+  const query = `UPDATE employee SET name = ?, email = ?, age = ? , profilepicture = ? WHERE id = ?`;
   const [results, fields] = await connection.query(
     query,
-    [name, email, age, id],
+    [name, email, age, profilepicture, id],
     function (error, results, fields) {
       if (error) throw error;
       console.log("User updated: ", results);
     }
   );
+  return results
 };
 
 module.exports = {

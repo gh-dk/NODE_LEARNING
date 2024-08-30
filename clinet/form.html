@@ -6,20 +6,75 @@
     <title>Document</title>
   </head>
   <body>
-    <form action="http://localhost:3000/update" method="post">
-      <input type="text" name="name" />
-      <input type="password" name="password" />
-      <button type="submit">submit</button>
-    </form>
-
     <h1>For mysql</h1>
 
-    <form action="http://localhost:3000/update" method="post">
+    <div>
+      <button onclick="getAllData()" id="getDataBtn">Get All Data</button>
+      <br /><br />
+      <div>
+        <input type="number" id="getIdInput" />
+        <button onclick="getIdInput()">
+          Get By id
+        </button>
+      </div>
+      <br />
+      <table id="dataTable" border="1"cellspacing="0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Profile Picture</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--  -->
+        </tbody>
+      </table>
+    </div>
+
+    <h1>Insert Data</h1>
+    <form
+      action="http://localhost:3000/"
+      method="post"
+      enctype="multipart/form-data"
+    >
       <input type="number" name="id" />
       <input type="text" name="name" />
       <input type="email" name="email" />
       <input type="number" name="age" />
+      <input
+        type="file"
+        name="profilepicture"
+        accept="image/gif, image/jpeg, image/png"
+      />
       <button type="submit">submit</button>
     </form>
+
+    <h1>update Data by id</h1>
+    <form
+      action="http://localhost:3000/update"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <input type="number" name="id" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="number" name="age" />
+      <input
+        type="file"
+        name="profilepicture"
+        accept="image/gif, image/jpeg, image/png"
+      />
+      <button type="submit">submit</button>
+    </form>
+
+    <h1>Delete Mysql by id</h1>
+    <form action="http://localhost:3000/delete" method="post">
+      <input type="number" name="id" required />
+      <button type="submit">Delete User</button>
+    </form>
   </body>
+  <script src="./getMysqlData.js"></script>
 </html>
