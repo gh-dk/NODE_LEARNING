@@ -115,6 +115,7 @@ app.patch(
 
       let dbPathName = existingBook[0].pdf;
       if (pdfFile) {
+        await deletePdf(dbPathName);
         dbPathName = await savePDFFile(pdfFile, "public/books");
       }
 
