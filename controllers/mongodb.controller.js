@@ -78,9 +78,8 @@ const insertUser = async (
 
 const updateUser = async (req, res) => {
   const id = req.params.id;
-  console.log("Update request received", req.body);
-  console.log("Profile Picture:", req.file);
-  const newprofilePic = req.file ? req.file.buffer : null;
+  console.log("Update request received", id, req.body);
+
   try {
     const updatedUser = await userModel.updateOne(
       { _id: id },
@@ -92,9 +91,6 @@ const updateUser = async (req, res) => {
           dept: req.body.dept,
           joiningDate: req.body.joiningDate,
           address: req.body.address,
-          profilePic: newprofilePic
-            ? { data: newprofilePic, contentType: req.file.mimetype }
-            : null,
         },
       }
     );

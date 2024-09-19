@@ -10,6 +10,7 @@ const multer = require("multer");
 const { getAllUsers } = require("./controllers/mysql.controller");
 const { connectDB } = require("./config/mysqldb");
 const cors = require("cors");
+const { userModel } = require("./model/mongodb.model");
 const app = express();
 
 app.use(
@@ -24,7 +25,7 @@ const upload = multer();
 
 let mysqlDB;
 
-const PORT = 3000;
+const PORT = 3001;
 
 app.get("/", async (req, res) => {
   const data = await getAllData();
@@ -59,9 +60,35 @@ app.post("/add", upload.single("profilePic"), async (req, res) => {
   res.json(data);
 });
 
-app.patch("/update/:id", upload.single("profilePic"), updateUser);
+app.patch("/update/:id", updateUser);
 
 app.delete("/delete/:id", deleteById);
+
+app.patch(
+  "/update/profilePic/:id",
+  upload.single("profilePic"),
+  async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+
+    const newProfilePic = req.file
+      ? {
+          data: req.file.buffer,
+          contentType: req.file.mimetype,
+        }
+      : null;
+
+    const updatedUser = await userModel.updateOne(
+      { _id: id },
+      {
+        $set: {
+          profilePic: newProfilePic,
+        },
+      }
+    );
+    res.status(200).json({ message: "Profile picture updated successfully" });
+  }
+);
 
 app.get("/sql", async (req, res) => {
   const data = getAllUsers(mysqlDB);
