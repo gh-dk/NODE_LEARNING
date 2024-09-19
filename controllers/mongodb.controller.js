@@ -110,10 +110,26 @@ const updateUser = async (req, res) => {
   }
 };
 
+const searchEmployeeByName = async (req, res) => {
+  const title = req.params.title;
+  console.log("Search by name");
+
+  try {
+    const users = await userModel.find({
+      name: { $regex: title, $options: "i" },
+    });
+    console.log(users);
+    res.json(users);
+  } catch {
+    console.log("error");
+  }
+};
+
 module.exports = {
   getAllData,
   getUserById,
   deleteById,
   insertUser,
   updateUser,
+  searchEmployeeByName,
 };

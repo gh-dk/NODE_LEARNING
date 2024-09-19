@@ -182,6 +182,13 @@ const savePDFFile = async (pdfFile, directory) => {
 app.delete("/delete/books/:id", async (req, res) => {
   try {
     const id = req.params.id;
+    const [book] = await mysqlDB.query("SELECT pdf FROM books WHERE id = ?", [
+      id,
+    ]);
+    if (!book.length) {
+      return res.status(404).json({ error: "Book not found" });
+    }
+    const pdfPath = book[0].pdf;
     const [result] = await mysqlDB.query("DELETE FROM books WHERE id = ?", [
       id,
     ]);
@@ -189,7 +196,7 @@ app.delete("/delete/books/:id", async (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Book not found" });
     }
-
+    await deletePdf(pdfPath);
     res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
     console.error("Error deleting book:", error);
@@ -214,6 +221,15 @@ app.get("/search/books/:title", async (req, res) => {
     res.status(500).json({ error: "Failed to search books" });
   }
 });
+
+const deletePdf = async (pdfPath) => {
+  const fullPath = path.join(__dirname, pdfPath);
+  fs.unlink(fullPath, (err) => {
+    if (err) {
+      console.error("Error deleting PDF file:", err);
+    }
+  });
+};
 
 app.listen(PORT, async () => {
   mysqlDB = await connectDB();

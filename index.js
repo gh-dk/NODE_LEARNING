@@ -5,6 +5,7 @@ const {
   deleteById,
   getUserById,
   updateUser,
+  searchEmployeeByName,
 } = require("./controllers/mongodb.controller");
 const multer = require("multer");
 const { getAllUsers } = require("./controllers/mysql.controller");
@@ -89,6 +90,8 @@ app.patch(
     res.status(200).json({ message: "Profile picture updated successfully" });
   }
 );
+
+app.get("/search/:title", searchEmployeeByName);
 
 app.get("/sql", async (req, res) => {
   const data = getAllUsers(mysqlDB);
